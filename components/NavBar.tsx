@@ -18,7 +18,7 @@ const shortAddress = address ? `${address.slice(0, 6)}...${address.slice(-4)}` :
 
   if (!isMounted) {
     return (
-      <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, backgroundColor: "rgba(5, 19, 43, 0.8)", padding: 0, margin: 0, width: "100%", boxSizing: "border-box", backdropFilter: "blur(20px)" }}>
+      <div className="navbar">
         <div className="flex justify-between items-center px-4 py-3">
           <div className="flex items-center gap-2">
             <img src="/images/logo.png" alt="Crypto Snack" className="h-12 w-auto flex-shrink-0" />
@@ -30,7 +30,7 @@ const shortAddress = address ? `${address.slice(0, 6)}...${address.slice(-4)}` :
   }
 
   return (
-    <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 50, backgroundColor: "rgba(5, 19, 43, 0.8)", padding: 0, margin: 0, width: "100%", boxSizing: "border-box", backdropFilter: "blur(20px)" }}>
+    <div className="navbar">
       <div className="flex justify-between items-center px-4 py-3">
         <div className="flex items-center gap-2">
           <img src="/images/logo.png" alt="Crypto Snack" className="h-12 w-auto flex-shrink-0" />

@@ -23,9 +23,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="icon" href="/images/icon.png" />
       </head>
       <body className="min-h-screen flex flex-col" suppressHydrationWarning>
-        <Providers>
-          {children}
-        </Providers>
+        <div className="viewport-container">
+          <Providers>
+            {children}
+          </Providers>
+        </div>
       </body>
     </html>
   );
