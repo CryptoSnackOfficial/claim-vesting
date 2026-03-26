@@ -2,6 +2,16 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'build'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=${_WALLETCONNECT_PROJECT_ID}'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_APP_URL=${_APP_URL}'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_VESTING_CONTRACT_ADDRESS=${_VESTING_CONTRACT_ADDRESS}'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_SNACK_TOKEN_ADDRESS=${_SNACK_TOKEN_ADDRESS}'
+      - '--build-arg'
+      - 'NEXT_PUBLIC_BSC_RPC_URL=${_BSC_RPC_URL}'
       - '-t'
       - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/cryptosnackofficial-claim-vesting/claim-vesting-app:${COMMIT_SHA}'
       - '-t'
@@ -46,11 +56,27 @@ images:
 
 options:
   logging: CLOUD_LOGGING_ONLY
-  # machineType: 'E2_HIGHCPU_8'
-  # diskSizeGb: 100
+  machineType: 'E2_HIGHCPU_8'
+  diskSizeGb: 100
 
 timeout: '1200s'
 
 substitutions:
-  _REGION: 'europe-west1'
-  _SERVICE_NAME: 'claim-vesting-app'
+  _WALLETCONNECT_PROJECT_ID: ''
+  _APP_URL: ''
+  _VESTING_CONTRACT_ADDRESS: ''
+  _SNACK_TOKEN_ADDRESS: ''
+  _BSC_RPC_URL: ''
+
+availableSecrets:
+  secretManager:
+    - versionName: 'projects/${PROJECT_ID}/secrets/WALLETCONNECT_PROJECT_ID/versions/latest'
+      env: '_WALLETCONNECT_PROJECT_ID'
+    - versionName: 'projects/${PROJECT_ID}/secrets/APP_URL/versions/latest'
+      env: '_APP_URL'
+    - versionName: 'projects/${PROJECT_ID}/secrets/VESTING_CONTRACT_ADDRESS/versions/latest'
+      env: '_VESTING_CONTRACT_ADDRESS'
+    - versionName: 'projects/${PROJECT_ID}/secrets/SNACK_TOKEN_ADDRESS/versions/latest'
+      env: '_SNACK_TOKEN_ADDRESS'
+    - versionName: 'projects/${PROJECT_ID}/secrets/BSC_RPC_URL/versions/latest'
+      env: '_BSC_RPC_URL'
