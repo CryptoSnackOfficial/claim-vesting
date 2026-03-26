@@ -1,0 +1,36 @@
+{
+  "name": "claim-vesting",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@fontsource/material-symbols-outlined": "^5.2.38",
+    "@metamask/connect-evm": "^0.9.0",
+    "@reown/appkit": "^1.8.19",
+    "@reown/appkit-adapter-wagmi": "^1.8.19",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@tanstack/react-query": "^5.80.0",
+    "next": "16.2.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^4.2.2",
+    "viem": "^2.47.0",
+    "wagmi": "^2.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5"
+  },
+  "resolutions": {
+    "motion": "10.16.4",
+    "@motionone/dom": "10.16.4",
+    "@motionone/generators": "10.16.4"
+  }
+}

@@ -1,0 +1,13 @@
+.git
+.gitignore
+.next
+node_modules
+.env
+.env.local
+.env.*.local
+*.md
+docs
+screen.png
+AGENTS.md
+DESIGN.md
+GUIDE.md
