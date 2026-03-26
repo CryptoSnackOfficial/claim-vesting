@@ -16,7 +16,7 @@ export default function Home() {
               SNACK Token Vesting
             </h1>
             <p className="text-on-surface-variant text-base md:text-lg max-w-2xl mx-auto font-body">
-              This site shows your SNACK token vesting schedule. Connect your wallet to see how many tokens are available to claim. When tokens are ready, click "Claim" to transfer them to your wallet.
+              This site shows your SNACK token vesting schedule. Connect your wallet that has a vesting schedule to see how many tokens are available to claim. When tokens are ready, click "Claim" to transfer them to your wallet.
             </p>
             <p className="text-center text-on-surface/40 text-sm font-body max-w-md mx-auto">
               Please Note: This app does not hold your tokens or private keys, or record any transactions or wallet addresses. All interactions are directly with the secure vesting smart contract on the BNB Smart Chain. 

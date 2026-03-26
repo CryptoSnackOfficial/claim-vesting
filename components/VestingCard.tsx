@@ -3,7 +3,7 @@
 import { useAppKit, useAppKitAccount } from "@reown/appkit/react";
 import { ProgressBar } from "./ProgressBar";
 import { useVestingData } from "@/hooks/useVestingData";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 function formatTokens(raw: bigint, decimals = 18): string {
   const divisor = 10n ** BigInt(decimals);
@@ -29,6 +29,25 @@ export function VestingCard() {
   
    const { isLoading, error, releasableAmount, totalAllocated, totalReleased, claimablePercent, startDate, cliffDate, endDate, claim, isClaiming, claimError, tokenBalance } = useVestingData();
   const [showBalance, setShowBalance] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (isClaiming) {
+      setIsRefreshing(true);
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+      }
+      refreshTimeoutRef.current = setTimeout(() => {
+        setIsRefreshing(false);
+      }, 31500);
+    }
+    return () => {
+      if (refreshTimeoutRef.current) {
+        clearTimeout(refreshTimeoutRef.current);
+      }
+    };
+  }, [isClaiming]);
 
   if (!isConnected) {
     return (
@@ -40,7 +59,7 @@ export function VestingCard() {
           <div className="space-y-2">
             <h2 className="font-headline font-bold text-xl text-on-surface">Connect Your Wallet</h2>
             <p className="text-on-surface/60 text-sm font-body max-w-sm">
-              Connect your wallet to view your vesting schedule and claim available tokens.
+              Connect your wallet that has a vesting schedule to view your vesting schedule and claim available tokens.
             </p>
           </div>
           <button
@@ -112,6 +131,11 @@ export function VestingCard() {
                   <>
                     <div className="w-5 h-5 rounded-full border-2 border-on-primary-container/30 border-t-on-primary-container animate-spin" />
                     Confirming...
+                  </>
+                ) : isRefreshing ? (
+                  <>
+                    <div className="w-5 h-5 rounded-full border-2 border-on-primary-container/30 border-t-on-primary-container animate-spin" />
+                    Refreshing Data...
                   </>
                 ) : (
                   <>
