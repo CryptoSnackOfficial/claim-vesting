@@ -1,23 +1,20 @@
 steps:
+  - name: 'ubuntu'
+    entrypoint: bash
+    args:
+      - '-c'
+      - |
+        cat <<'EOF' > .env
+        NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=${_WALLETCONNECT_PROJECT_ID}
+        NEXT_PUBLIC_APP_URL=${_APP_URL}
+        NEXT_PUBLIC_VESTING_CONTRACT_ADDRESS=${_VESTING_CONTRACT_ADDRESS}
+        NEXT_PUBLIC_SNACK_TOKEN_ADDRESS=${_SNACK_TOKEN_ADDRESS}
+        NEXT_PUBLIC_BSC_RPC_URL=${_BSC_RPC_URL}
+        EOF
+
   - name: 'gcr.io/cloud-builders/docker'
-    env:
-      - 'WALLETCONNECT_PROJECT_ID=${_WALLETCONNECT_PROJECT_ID}'
-      - 'APP_URL=${_APP_URL}'
-      - 'VESTING_CONTRACT_ADDRESS=${_VESTING_CONTRACT_ADDRESS}'
-      - 'SNACK_TOKEN_ADDRESS=${_SNACK_TOKEN_ADDRESS}'
-      - 'BSC_RPC_URL=${_BSC_RPC_URL}'
     args:
       - 'build'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=${WALLETCONNECT_PROJECT_ID}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_APP_URL=${APP_URL}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_VESTING_CONTRACT_ADDRESS=${VESTING_CONTRACT_ADDRESS}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_SNACK_TOKEN_ADDRESS=${SNACK_TOKEN_ADDRESS}'
-      - '--build-arg'
-      - 'NEXT_PUBLIC_BSC_RPC_URL=${BSC_RPC_URL}'
       - '-t'
       - 'europe-west1-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/cryptosnackofficial-claim-vesting/claim-vesting-app:${COMMIT_SHA}'
       - '-t'
