@@ -10,9 +10,6 @@ out/
 .env.local
 !.env.example
 
-# Contract ABI (contains sensitive details)
-constants/vestingContract.json
-
 # Misc
 .DS_Store
 *.pem
