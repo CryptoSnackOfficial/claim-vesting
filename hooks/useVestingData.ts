@@ -11,7 +11,7 @@ function timestampToDate(ts: bigint): Date | null {
   return new Date(Number(ts) * 1000);
 }
 
-export function useVestingData(): VestingData & {
+export function useVestingData(debugOverride?: string): VestingData & {
   isLoading: boolean;
   error: Error | null;
   claim: () => Promise<void>;
@@ -21,6 +21,7 @@ export function useVestingData(): VestingData & {
   tokenBalance: bigint | undefined;
 } {
   const { address: walletAddress } = useAccount();
+  const effectiveAddress: `0x${string}` | undefined = (debugOverride || walletAddress) as `0x${string}` | undefined;
   const queryClient = useQueryClient();
 
   const contractAddress = vestingContract.address;
@@ -34,35 +35,35 @@ export function useVestingData(): VestingData & {
      address: contractAddress,
      abi: vestingContract.abi,
      functionName: "getReleasableAmount",
-     args: walletAddress ? [walletAddress] : undefined,
-     query: { enabled: !!walletAddress },
-   });
+      args: effectiveAddress ? [effectiveAddress] : undefined,
+      query: { enabled: !!effectiveAddress },
+    });
 
-   const {
-     data: rawSchedule,
-     isLoading: isLoadingSchedule,
-     error: errorSchedule,
-     refetch: refetchSchedule,
-   } = useReadContract({
-     address: contractAddress,
-     abi: vestingContract.abi,
-     functionName: "getVestingSchedule",
-     args: walletAddress ? [walletAddress] : undefined,
-     query: { enabled: !!walletAddress },
-   });
+    const {
+      data: rawSchedule,
+      isLoading: isLoadingSchedule,
+      error: errorSchedule,
+      refetch: refetchSchedule,
+    } = useReadContract({
+      address: contractAddress,
+      abi: vestingContract.abi,
+      functionName: "getVestingSchedule",
+      args: effectiveAddress ? [effectiveAddress] : undefined,
+      query: { enabled: !!effectiveAddress },
+    });
 
-   const {
-     data: rawTokenBalance,
-     isLoading: isLoadingBalance,
-     error: errorBalance,
-     refetch: refetchBalance,
-   } = useReadContract({
-     address: snackToken.address,
-     abi: snackToken.abi,
-     functionName: "balanceOf",
-     args: walletAddress ? [walletAddress] : undefined,
-     query: { enabled: !!walletAddress },
-   });
+    const {
+      data: rawTokenBalance,
+      isLoading: isLoadingBalance,
+      error: errorBalance,
+      refetch: refetchBalance,
+    } = useReadContract({
+      address: snackToken.address,
+      abi: snackToken.abi,
+      functionName: "balanceOf",
+      args: effectiveAddress ? [effectiveAddress] : undefined,
+      query: { enabled: !!effectiveAddress },
+    });
 
   const {
     writeContract,

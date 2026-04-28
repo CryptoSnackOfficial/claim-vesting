@@ -1,13 +1,69 @@
-import { createPublicClient, createWalletClient, http } from "viem";
-import { bsc } from "viem/chains";
+import { createPublicClient, createWalletClient, http, defineChain } from "viem";
 import vestingContractInfo from "@/constants/vestingContract.json";
+
+const chainId = parseInt(process.env.NEXT_PUBLIC_CHAIN_ID ?? "56", 10);
+const isTestnet = chainId !== 56;
+
+const bscMainnet = defineChain({
+  id: 56,
+  chainNamespace: "eip155",
+  name: "BNB Smart Chain",
+  caipNetworkId: "eip155:56",
+  nativeCurrency: {
+    decimals: 18,
+    name: "BNB",
+    symbol: "BNB",
+  },
+  blockExplorers: {
+    default: { name: "BscScan", url: "https://bscscan.com" },
+  },
+  contracts: {
+    multicall3: {
+      address: "0xcA11bde05977b3631167028862bE2a173976CA11" as `0x${string}`,
+    },
+  },
+  rpcUrls: {
+    default: {
+      http: [process.env.NEXT_PUBLIC_BSC_RPC_URL ?? "https://bsc-dataseed.binance.org/"],
+    },
+  },
+});
+
+const bscTestnet = defineChain({
+  id: 97,
+  chainNamespace: "eip155",
+  name: "BNB Smart Chain Testnet",
+  caipNetworkId: "eip155:97",
+  nativeCurrency: {
+    decimals: 18,
+    name: "BNB",
+    symbol: "BNB",
+  },
+  blockExplorers: {
+    default: { name: "BscScan", url: "https://testnet.bscscan.com" },
+  },
+  contracts: {
+    multicall3: {
+      address: "0xcA11bde05977b3631167028862bE2a173976CA11" as `0x${string}`,
+    },
+  },
+  rpcUrls: {
+    default: {
+      http: [process.env.NEXT_PUBLIC_BSC_TESTNET_RPC_URL ?? "https://bsc-testnet.publicnode.com/"],
+    },
+  },
+});
+
+const bsc = isTestnet ? bscTestnet : bscMainnet;
 
 const vestingAddress = process.env.NEXT_PUBLIC_VESTING_CONTRACT_ADDRESS ?? "";
 const snackTokenAddress = process.env.NEXT_PUBLIC_SNACK_TOKEN_ADDRESS ?? "";
 
 export const publicClient = createPublicClient({
   chain: bsc,
-  transport: http(process.env.NEXT_PUBLIC_BSC_RPC_URL ?? "https://bsc-dataseed.binance.org/"),
+  transport: http(isTestnet
+    ? (process.env.NEXT_PUBLIC_BSC_TESTNET_RPC_URL ?? "https://bsc-testnet.publicnode.com/")
+    : (process.env.NEXT_PUBLIC_BSC_RPC_URL ?? "https://bsc-dataseed.binance.org/")),
 });
 
 export function getWalletClient(account: `0x${string}`) {
